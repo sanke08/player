@@ -13,15 +13,16 @@ interface Props {
   style?: boolean
   outline?: boolean
   disable?: boolean
-  circle?: boolean
+  circle?: boolean,
+  loading?: boolean
 }
 
-export default function Button({ title, onclick, icon, className, style, outline, disable,circle }: Props) {
+export default function Button({ title, onclick, icon, className, style, loading, outline, disable, circle }: Props) {
   return (
     <>
-      <button onClick={onclick} disabled={disable} className={twMerge('px-5 py-1.5 rounded-lg flex justify-center items-center min-w-[5rem]',circle&&"min-w-fit", style && "bg-white/90 hover:bg-white text-black transition-all", outline && " border-neutral-500 border-2 text-white", className)}>
+      <button onClick={onclick} disabled={(disable || loading)} className={twMerge('px-5 py-1.5 rounded-lg flex active:scale-95 justify-center items-center min-w-[5rem]', circle && "min-w-fit", style && "bg-white/90 hover:bg-white text-black transition-all", outline && " border-neutral-500 border-2 text-white", className)}>
         {
-          disable ?
+          loading ?
             <Loader2 className=' animate-spin' color='black' />
             :
             <>

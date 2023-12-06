@@ -6,15 +6,21 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import ModalWrapper from './ModalWrapper'
-import { Loader2 } from 'lucide-react'
-import { CLOSE_UPLOAD_FILE_MODAL } from '@/redux/constance'
+import { Loader2, X } from 'lucide-react'
+import { CLOSE_UPLOAD_FILE_MODAL, OPEN_LOGIN_MODAL } from '@/redux/constance'
+import FileUploader from '../FileUploader'
+import Input from '../Input'
+import Image from 'next/image'
+import img from "../../../public/500x500.jpg"
+import Button from '../Button'
+import axios from 'axios'
 
 
 
 
 
 
-export default function Upload() {
+export default function Upload({ token }: any) {
 
 
     const router = useRouter()
@@ -22,201 +28,94 @@ export default function Upload() {
 
     const { user } = useSelector((state: any) => state.user)
     const { openUpload } = useSelector((state: any) => state.toggle)
-
-    const [title, setTitle] = useState("")
-    const [author, setAuthor] = useState("")
-    const [image, setImage] = useState("")
-    const [song, setSong] = useState("")
-    const [loading, setLoading] = useState(false)
-
-
-    const [imageUrl, setImageUrl] = useState("")
-    const [songUrl, setSongUrl] = useState("")
+    const [file, setfile] = useState<string>("")
+    const [image, setImage] = useState<string>("")
+    const [fileName, setFileName] = useState<string>("")
+    const [artistName, setArtistName] = useState<string>("")
+    const [loading, setLoading] = useState<boolean>(false)
 
 
-    const [imageUrlPath, setImageUrlPath] = useState("")
-    const [songUrlPath, setSongUrlPath] = useState("")
 
-
-    const [imageUrlProgress, setImageUrlProgress] = useState(0)
-    const [songUrlProgress, setSongUrlProgress] = useState(0)
-
-    const [disable, setDisable] = useState(true)
-
-
-    const handleSubmin = async () => {
-        if (!title || !songUrl || !imageUrl || !author) {
-            return toast.info("Please enter all field")
-        }
+    const handleUpload = async () => {
         setLoading(true)
-        // const response = await uploadFile(title, author, imageUrl, songUrl, imageUrlPath, songUrlPath)
-        // if (response.success) {
-        //     setLoading(false)
-        //     toast.success(response.message)
-        //     router.push("/")
-        //     return
-        // }
-        // if (!response.success) {
-        //     setLoading(false)
-        //     return toast.error(response.message)
-        // }
+        const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": token.value } })
+        setLoading(false)
     }
 
-    const handleUpload = async (file: any, urlType: string) => {
-
-        const storage = getStorage(app);
-        let storageRef
-        if (urlType === "image") {
-            const imagepath = `image/${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}-${file.name}`
-            await setImageUrlPath(imagepath)
-            storageRef = await ref(storage, imagepath);
-        } else {
-            const songpath = `song/${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}-${file.name}`
-            await setSongUrlPath(songpath)
-            storageRef = await ref(storage, songpath);
-        }
-
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        // Listen for state changes, errors, and completion of the upload.
-        uploadTask.on('state_changed',
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                urlType === "image" ? setImageUrlProgress(progress) : setSongUrlProgress(progress);
-                switch (snapshot.state) {
-                    case 'paused':
-                        toast.warn("Upload Is paused")
-                        break;
-                    case 'running':
-                        console.log(progress)
-                        break;
-                    default:
-                        break;
-                }
-            },
-            (error: any) => {
-                console.log(error)
-                toast.error(error)
-            },
-            async () => {
-                // Upload completed successfully, now we can get the download URL
-                await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    if (urlType === "image") {
-                        setImageUrl(downloadURL)
-                        toast.success("Image Uploaded Successfully")
-                        console.log("image", downloadURL)
-                    }
-                    if (urlType === "song") {
-                        setSongUrl(downloadURL)
-                        toast.success("song Uploaded Successfully")
-                        console.log("song", downloadURL)
-                    }
-                })
-            },
-        );
-    }
-
-
-    useEffect(() => {
-        imageUrl && songUrl && toast.success("Upload Now")
-    }, [imageUrl, songUrl])
-
-
-    useEffect(() => {
-        image && handleUpload(image, "image")
-    }, [image])
-
-    useEffect(() => {
-        song && handleUpload(song, "song")
-    }, [song])
-
-    useEffect(() => {
-        if (imageUrl && songUrl) {
-            setDisable(false)
-        }
-    }, [imageUrl, songUrl])
-
-
-    useEffect(() => {
-        if (!user) {
-            toast.error("Please Login First")
-            return
-        }
-
-    }, [user, router])
     const handleClose = () => {
+        setfile("")
+        setImage("")
+        setFileName("")
+        setArtistName("")
         dispatch({ type: CLOSE_UPLOAD_FILE_MODAL })
     }
+    
+    const changeToLogin=()=>{
+        dispatch({ type: CLOSE_UPLOAD_FILE_MODAL })
+        dispatch({type:OPEN_LOGIN_MODAL})
+    }
+
+
     return (
         <ModalWrapper isOpen={openUpload} headertext='Add Song' classname=' sm:w-[40rem]' close={handleClose}>
-            <div className=' p-5 flex justify-center items-center w-full'>
-                {/* <div className='  sm:px-10 pt-4 rounded-xl flex flex-col justify-center items-center w-full'>
-                    {loading ? <Loader2 className=' animate-spin' /> :
-                        <>
-                            <div className='flex flex-col justify-center items-center gap-4 w-full'>
-                                <input type="text" placeholder='Song title' value={title} onChange={(e) => setTitle(e.target.value)} className=' px-3 py-1 rounded-lg bg-neutral-700  w-full' />
-                                <input type="text" placeholder='Song author' value={author} onChange={(e) => setAuthor(e.target.value)} className=' px-3 py-1 rounded-lg bg-neutral-700  w-full' />
-                                <div className=' px-2 w-full'>
-                                    {
-                                        imageUrlProgress > 0 ?
-                                            <div>
-                                                {imageUrlProgress === 100 ?
-                                                    <>
-                                                        Uploaded
-                                                    </> :
-                                                    <>
-                                                        Uploading... {Math.round(imageUrlProgress)}%
-                                                    </>
-                                                }
-                                            </div>
-                                            :
-                                            <>
-                                                <div className=''>
-                                                    Song image :
-                                                </div>
-                                                <input type="file" accept='image/*' onChange={(e) => setImage(e.target.files[0])} className='w-full px-3 py-1 rounded-lg bg-neutral-700 cursor-pointer' />
-                                            </>
-                                    }
-                                </div>
-                                <div className=' px-2 w-full'>
-                                    {
-                                        songUrlProgress > 0 ?
-                                            <div>
-                                                {songUrlProgress === 100 ?
-                                                    <>Uploaded </> :
-                                                    <>
-                                                        Uploading...{Math.round(songUrlProgress)}%
-                                                    </>
-                                                }
-                                            </div>
-                                            :
-                                            <>
-                                                <div className=''>
-                                                    Song file :
-                                                </div>
-
-                                                <input type="file" accept='.mp3' onChange={(e) => setSong(e.target.files[0])} className='w-full px-3 py-1 rounded-lg bg-neutral-700 cursor-pointer' />
-                                            </>
-                                    }
-                                </div>
-
-                                <button onClick={handleSubmin} disabled={disable} className='px-10 mt-5 bg-green-500 text-black  py-1 rounded-lg'>
-                                    {imageUrl && songUrl ? <>Create</> : <>wait...</>}
-                                </button>
-                            </div>
-                        </>
-                    }
-                </div> */}
-                <div className=' text-center'>
+            {
+                user?._id ?
+                    <div className=' p-5 flex gap-4 flex-col justify-center w-full h-fit'>
+                        <div className=' flex gap-4'>
+                            <p className=' w-[30%]'>
+                                Name :
+                            </p>
+                            <Input placeholder='Enter Song Name' value={fileName} onChange={(e) => setFileName(e.target.value)} type={"text"} className=' w-[60%]' />
+                        </div>
+                        <div className=' flex gap-4'>
+                            <p className=' w-[30%]'>
+                                Artist :
+                            </p>
+                            <Input placeholder='Enter Singer Name' value={artistName} onChange={(e) => setArtistName(e.target.value)} type={"text"} className=' w-[60%]' />
+                        </div>
+                        <div className=' flex gap-4'>
+                            <p className=' w-[30%]'>
+                                Thumbnail :
+                            </p>
+                            {
+                                image ?
+                                    <div className=' relative w-28 h-28  rounded-lg overflow-hidden'>
+                                        <Image src={image} alt='Img' fill />
+                                        <button onClick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full'><X size={20} /> </button>
+                                    </div>
+                                    :
+                                    <FileUploader endpoint={"imageUploader"} onchange={(value: any) => setImage(value)} />
+                            }
+                        </div>
+                        <div className=' flex gap-4'>
+                            <p className=' w-[30%]'>
+                                Song :
+                            </p>
+                            {
+                                file ?
+                                    <Button title='Cancle' onclick={() => setfile("")} className=' bg-red-500 px-12 rounded-md' style />
+                                    :
+                                    <FileUploader endpoint={"audioUploader"} onchange={(value: any) => setfile(value)} />
+                            }
+                        </div>
+                        <Button title='Upload' style onclick={handleUpload} loading={loading} disable={!fileName || !artistName || !file || !image} />
+                        {/* <div className=' text-center'>
                     Extreamly sorry you can't Add your song right now because developer's  data storage limit has been reach
                     <div className=' mt-5'>
-                        You can contact to developer for this
+                    You can contact to developer for this
                     </div>
                     <div className=' text-green-600 font-bold text-lg'>
-                        sanketgawande08@gmail.com
+                    sanketgawande08@gmail.com
                     </div>
-                </div>
-            </div>
+                </div> */}
+                    </div>
+                    :
+                    <div className=' w-full space-y-3'>
+                        <p className=' w-max mx-auto text-neutral-500'>Login to upload song</p>
+                        <Button title='Login' onclick={changeToLogin} style className=' mx-auto' />
+
+                    </div>
+            }
         </ModalWrapper>
     )
 }

@@ -25,9 +25,9 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
-  const token = await cookies().get("music_auth_token") || ""
+  const token =  cookies().get("music_auth_token") || ""
 
-
+console.log(token)
 
   return (
     <ReduxProvider>
@@ -37,7 +37,7 @@ export default async function RootLayout({
             <ToastProvider>
               <Toaster toastOptions={{ duration: 3000, position: "top-center" }} />
             </ToastProvider>
-            <Upload />
+            <Upload token={token} />
             <Login />
             <Register />
             <div className=' flex w-full h-full'>
