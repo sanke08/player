@@ -21,11 +21,8 @@ export default function Player() {
 
     if (!song?._id) return
     // @ts-ignore
-    return (
-        <div>
-            <PlayerContent key={currsong?.song} songUrl={currsong?.song} song={currsong} />
-        </div>
-    )
+    return <PlayerContent key={currsong?.song} songUrl={currsong?.song} song={currsong} />
+    
 }
 
 

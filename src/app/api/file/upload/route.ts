@@ -14,15 +14,15 @@ export const POST = async (req: NextRequest) => {
         }
         const token = req.headers.get("Authorization");
         if (!token) return NextResponse.json({ message: "please login", success: false })
-        const decode = jwt.decode(token);
-        const user = await User.findById(decode?.id)
-        if (user) {
-            const songg = await File.create({ title: fileName, author: artistName, image, song: file, user: user?.id })
-            if (!songg) {
-                throw new Error("File noot created")
+        const decode:any = jwt.decode(token);
+            const user = await User.findById(decode?.id)
+            if (user) {
+                const songg = await File.create({ title: fileName, author: artistName, image, song: file, user: user?.id })
+                if (!songg) {
+                    throw new Error("File noot created")
+                }
+                return NextResponse.json({ success: true, message: "File created successfully", file: file })
             }
-            return NextResponse.json({ success: true, message: "File created successfully", file: file })
-        }
     } catch (error: any) {
         return NextResponse.json({ success: false, message: error.message, })
     }
