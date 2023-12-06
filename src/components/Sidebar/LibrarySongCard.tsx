@@ -6,6 +6,8 @@ import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { loadUser } from '@/redux/actions/user.actions'
+import { useSession } from 'next-auth/react'
 interface Props {
     song: {
         _id: string,
@@ -18,17 +20,14 @@ interface Props {
         user: string,
         __v: number
     }
-    authToken?: {
-        name?: any
-        value?: any
-    }
 }
 
 
-const LibrarySongCard: React.FC<Props> = ({ song, authToken }) => {
+const LibrarySongCard: React.FC<Props> = ({ song }) => {
     const { user } = useSelector((state: any) => state.user)
     const dispatch = useDispatch()
     const router = useRouter()
+    const { data: session } = useSession()
     const [like, setLike] = useState(false)
     const handlePlay = () => {
         dispatch({ type: "PLAYER_LIST", payload: song })
@@ -36,14 +35,13 @@ const LibrarySongCard: React.FC<Props> = ({ song, authToken }) => {
     const handleLike = async () => {
         if (user._id) {
             setLike(!like)
-            await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": authToken?.value } })
+            await axios.put("/api/file/handle-like", { songId: song._id })
             router.refresh()
         }
     }
     useEffect(() => {
         const Liked = user?.liked?.find((value: any) => value === song._id)
         setLike(Liked)
-        console.log(Liked)
     }, [song._id, user?.liked])
 
     return (

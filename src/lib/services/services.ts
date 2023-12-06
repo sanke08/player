@@ -2,12 +2,10 @@ import jwt from "jsonwebtoken"
 import { File } from "../models/file"
 import { User } from "../models/user"
 import CONNECTION from "../connection"
-export const getSongsByUserId = async (token: any) => {
+export const getSongsByUserId = async (id: string) => {
     try {
         await CONNECTION()
-        const decode = await jwt.decode(token.value)
-        // @ts-ignore
-        const user = await User.findById(decode?.id)
+        const user = await User.findById(id)
         if (!user) return
         const songs = await File.find({ user: user._id })
         return  songs 

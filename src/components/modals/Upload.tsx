@@ -20,7 +20,7 @@ import axios from 'axios'
 
 
 
-export default function Upload({ token }: any) {
+export default function Upload() {
 
 
     const router = useRouter()
@@ -38,7 +38,7 @@ export default function Upload({ token }: any) {
 
     const handleUpload = async () => {
         setLoading(true)
-        const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": token.value } })
+        const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": user._id } })
         setLoading(false)
     }
 

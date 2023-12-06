@@ -3,6 +3,7 @@ import { File } from "@/lib/models/file";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { User } from "@/lib/models/user";
+import { getAuthSession } from "@/lib/auth";
 
 export const PUT = async (req: NextRequest) => {
     try {
@@ -15,11 +16,10 @@ export const PUT = async (req: NextRequest) => {
         if (!song) {
             return NextResponse.json({ message: "No song With id : " + songId })
         }
-        const token = req.headers.get("Authorization")
-        if (!token) return NextResponse.json({ message: "Plese Login", success: false })
-        const decode = jwt.decode(token)
+        const session= await getAuthSession()
+        if (!session) return NextResponse.json({ message: "Plese Login", success: false })
         // @ts-ignore
-        const user = await User.findById(decode?.id)
+        const user = await User.findById(session?.user?.id)
         if (!user) return NextResponse.json({ message: "Please login", success: false })
 
         if (!user.liked.includes(songId)) {

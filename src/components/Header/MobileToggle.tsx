@@ -1,7 +1,6 @@
 "use client"
 import { loadUser } from '@/redux/actions/user.actions'
 import { CLOSE_MOBILE_TOGGLE, OPEN_LOGIN_MODAL, OPEN_MOBILE_TOGGLE, OPEN_REGISTER_MODAL } from '@/redux/constance'
-
 import axios from 'axios'
 import { ChevronLeft, ChevronRight, Home, Menu, Search, UserCircle, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -9,22 +8,26 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button'
 import { twMerge } from 'tailwind-merge'
+import { signIn, signOut, useSession } from "next-auth/react"
 
-const MobileToggle = ({ children, token }: { children: React.ReactNode, token: any }) => {
+
+
+
+
+const MobileToggle = ({ children }: { children: React.ReactNode }) => {
+    const { data: session } = useSession()
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
+    const { user } = useSelector((state: any) => state.user)
     const router = useRouter()
     useEffect(() => {
         const get = async () => {
-            await loadUser({ token })(dispatch)
+            // @ts-ignore
+            await loadUser({ id: session?.user?.id })(dispatch)
         }
         get()
-    }, [token, dispatch])
+    }, [dispatch, session])
 
-    const handleLogout = async () => {
-        await axios.get("/api/user/auth/logout")
-        router.refresh()
-    }
     return (
         <div className=''>
             <div className={twMerge(' fixed left-0 w-[0%] h-full top-16 bottom-0 lgt z-10 overflow-x-hidden sm:hidden', openMobile && "w-[100%] px-1 lgt")}>
@@ -34,7 +37,7 @@ const MobileToggle = ({ children, token }: { children: React.ReactNode, token: a
             </div>
             <div className=' pb-32 bg-gradient-to-b from-green-800 w-full rounded-t-lg py-5 pr-5 pl-3 flex justify-between'>
                 <div className='gap-4 hidden md:flex items-center'>
-                    <Button onclick={() => router.back()}  circle icon={<ChevronLeft size={35} />} className=' bg-neutral-900 h-fit p-1 rounded-full' />
+                    <Button onclick={() => router.back()} circle icon={<ChevronLeft size={35} />} className=' bg-neutral-900 h-fit p-1 rounded-full' />
                     <Button onclick={() => router.forward()} circle icon={<ChevronRight size={35} />} className=' bg-neutral-900 h-fit p-1 rounded-full' />
                 </div>
                 <div className=' flex gap-2 items-center md:hidden'>
@@ -46,15 +49,16 @@ const MobileToggle = ({ children, token }: { children: React.ReactNode, token: a
                     <Search onClick={() => router.push("/search")} />
                 </div>
                 {
-                    token.value ?
+                    user?._id ?
                         <div className=' flex items-center gap-5'>
-                            <Button title='Logout' style onclick={handleLogout} />
+                            <Button title='Logout' style onclick={() => signOut()} />
                             <UserCircle />
                         </div>
                         :
                         <div className=' flex gap-3'>
-                            <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
-                            <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline />
+                            {/* <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
+                            <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline /> */}
+                            <Button title='Login' onclick={() => signIn("google")} style />
                         </div>
                 }
             </div>

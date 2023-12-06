@@ -4,11 +4,11 @@ import Library from '../Sidebar/LibrarySidebar'
 
 
 
-const Header = ({ token }: { token?: any }) => {
+const Header = () => {
 
     return (
-        <MobileToggle token={token}>
-            <Library token={token} />
+        <MobileToggle >
+            <Library  />
         </MobileToggle>
     )
 }

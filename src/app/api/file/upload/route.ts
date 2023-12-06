@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { File } from "@/lib/models/file"
 import { User } from "@/lib/models/user"
+import { getAuthSession } from "@/lib/auth"
 
 
 export const POST = async (req: NextRequest) => {
@@ -12,10 +13,10 @@ export const POST = async (req: NextRequest) => {
         if (!file || !image || !fileName || !artistName) {
             throw new Error("Please Enter All fields")
         }
-        const token = req.headers.get("Authorization");
-        if (!token) return NextResponse.json({ message: "please login", success: false })
-        const decode:any = jwt.decode(token);
-            const user = await User.findById(decode?.id)
+        const session =await getAuthSession()
+        if (!session) return NextResponse.json({ message: "please login", success: false })
+        // @ts-ignore
+            const user = await User.findById(session?.user?.id)
             if (user) {
                 const songg = await File.create({ title: fileName, author: artistName, image, song: file, user: user?.id })
                 if (!songg) {

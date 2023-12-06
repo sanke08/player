@@ -7,6 +7,8 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
+import { loadUser } from '@/redux/actions/user.actions'
+import { useSession } from 'next-auth/react'
 
 interface Props {
     song: {
@@ -18,9 +20,8 @@ interface Props {
         user: string,
         __v: number
     }
-    authToken?:any
 }
-const SongCard: React.FC<Props> = ({ song, authToken }) => {
+const SongCard: React.FC<Props> = ({ song }) => {
     const router = useRouter()
     const dispatch = useDispatch()
     const { user } = useSelector((state: any) => state.user)
@@ -28,16 +29,16 @@ const SongCard: React.FC<Props> = ({ song, authToken }) => {
     const handleLike = async () => {
         if (user?._id) {
             setLike(!like)
-            console.log(authToken)
-            await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": authToken?.value } })
+            await axios.put("/api/file/handle-like", { songId: song._id })
             router.refresh()
+            // @ts-ignore
+            // await loadUser({ id: session?.user?.id })(dispatch)
         }
     }
     const handlePlay = () => {
         if (!user?._id) {
             return toast.error("Please Login")
         }
-
         dispatch({ type: "PLAYER_LIST", payload: song })
     }
     useEffect(() => {
