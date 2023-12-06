@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 let connect=false
 const CONNECTION=async()=>{
     try {
-        await mongoose.connect(`${process.env.MONGO_URL}`,{
+        await mongoose.connect(`${process.env.MONGO_URL!}`,{
             dbName:"spotify-clone",
         })
         console.log("Connected")
