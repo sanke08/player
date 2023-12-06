@@ -18,10 +18,7 @@ interface Props {
         user: string,
         __v: number
     }
-    authToken?: {
-        name?: any
-        value?: any
-    }
+    authToken?:any
 }
 const SongCard: React.FC<Props> = ({ song, authToken }) => {
     const router = useRouter()
