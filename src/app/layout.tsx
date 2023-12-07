@@ -26,7 +26,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session=await getAuthSession()
+  const session = await getAuthSession()
   return (
     <ReduxProvider>
       <html lang="en" >
@@ -43,12 +43,13 @@ export default async function RootLayout({
                 <Sidebar />
                 <div className=' h-full bg-neutral-900 rounded-lg'>
                   {/* @ts-ignore */}
-                  <Library user={session?.user}/>
+                  <Library user={session?.user} />
                 </div>
               </div>
               <div className=' w-full py-1 h-full sm:pl-[253px]'>
                 <div className='  bg-neutral-900 rounded-xl pb-20'>
-                  <Header user={session?.user}/>
+                  {/* @ts-ignore */}
+                  <Header user={session?.user} />
                   <div className=' w-full h-full min-h-[75vh] rounded-xl '>
                     {children}
                   </div>
