@@ -9,11 +9,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button'
 import { twMerge } from 'tailwind-merge'
 import { signIn, signOut } from 'next-auth/react'
+import Image from 'next/image'
 
 
 
 
-const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null } | null | undefined }) => {
+const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null, image: string | undefined | null } | null | undefined }) => {
 
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
@@ -42,7 +43,14 @@ const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { e
                     user?._id ?
                         <div className=' flex items-center gap-5'>
                             <Button title='Logout' style onclick={() => { signOut(); router.refresh() }} />
-                            <UserCircle />
+                            {
+                                user.image ?
+                                    <div className=' relative w-10 h-10 aspect-square rounded-full overflow-hidden'>
+                                        <Image src={user.image} alt='img' fill className=' object-contain' />
+                                    </div>
+                                    :
+                                    <UserCircle />
+                            }
                         </div>
                         :
                         <div className=' flex gap-3'>

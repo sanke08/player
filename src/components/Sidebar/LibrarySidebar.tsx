@@ -8,13 +8,19 @@ export default async function Library({ user }: { user: { email?: string | undef
 
     // @ts-ignore
     const songs = await getSongsByUserId(user?._id)
-    // if (!songs) return
 
     return (
         <div className=' bg-neutral-900 h-full rounded-xl'>
             <Suspense fallback={<p>Loading......</p>}>
                 <div className=' h-full w-full rounded-xl p-2 flex flex-col gap-2 bg-neutral-900 pb-32'>
-                    <LibraryHeader user={user}/>
+                    <LibraryHeader user={user} />
+                    {
+                        // @ts-ignore
+                        songs?.length < 1 &&
+                        <div className=' w-fit mx-auto mt-5 text-neutral-400'>
+                            No song Upload Yet
+                        </div>
+                    }
                     {
                         songs &&
                         <div className=' gap-2 mt-1 grid grid-cols-1 w-full'>

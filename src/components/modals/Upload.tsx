@@ -12,6 +12,7 @@ import Button from '../Button'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
+import img from "../../../public/500x500.jpg"
 
 
 
@@ -39,6 +40,7 @@ export default function Upload() {
         setLoading(true)
         // @ts-ignore
         const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": session?.user?._id } })
+        console.log(data)
         setLoading(false)
         router.refresh()
         handleClose()
@@ -84,7 +86,7 @@ export default function Upload() {
                                 image ?
                                     <div className=' relative w-28 h-28  rounded-lg overflow-hidden'>
                                         <Image src={image} alt='Img' fill />
-                                        <Button onclick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full' icon={<X size={20} />} />
+                                        <Button onclick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full p-0.5 min-w-fit' icon={<X size={20} />} />
                                     </div>
                                     :
                                     <FileUploader endpoint={"imageUploader"} onchange={(value: any) => setImage(value)} />
@@ -101,7 +103,9 @@ export default function Upload() {
                                     <FileUploader endpoint={"audioUploader"} onchange={(value: any) => setfile(value)} />
                             }
                         </div>
-                        <Button title={!fileName || !artistName || !file || !image?"Fill all Detail":'Upload'} style onclick={handleUpload} loading={loading} disable={!fileName || !artistName || !file || !image} />
+                        <Button title={!fileName || !artistName || !file || !image ? "Fill all Detail" : 'Upload'} style onclick={handleUpload} loading={loading} disable={!fileName || !artistName || !file || !image} />
+
+                        <p className=' text-center mx-auto text-red-600'>Please do not close the window while uploading files</p>
                         {/* <div className=' text-center'>
                     Extreamly sorry you can't Add your song right now because developer's  data storage limit has been reach
                     <div className=' mt-5'>

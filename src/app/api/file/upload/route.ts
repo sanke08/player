@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { File } from "@/lib/models/file"
 import { User } from "@/lib/models/user"
 
-export const dynamic = "force-static"
+
 export const POST = async (req: NextRequest) => {
     try {
         await CONNECTION()
@@ -12,6 +12,7 @@ export const POST = async (req: NextRequest) => {
             throw new Error("Please Enter All fields")
         }
         const id = req.headers.get("Authorization")
+        console.log(id)
         if (!id) return NextResponse.json({ message: "please login", success: false })
         const user = await User.findById(id)
         if (user) {
