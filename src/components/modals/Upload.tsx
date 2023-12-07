@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import ModalWrapper from './ModalWrapper'
-import { Loader2, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { CLOSE_UPLOAD_FILE_MODAL, OPEN_LOGIN_MODAL } from '@/redux/constance'
 import FileUploader from '../FileUploader'
 import Input from '../Input'
@@ -81,7 +81,7 @@ export default function Upload() {
                                 image ?
                                     <div className=' relative w-28 h-28  rounded-lg overflow-hidden'>
                                         <Image src={image} alt='Img' fill />
-                                        <button onClick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full'><X size={20} /> </button>
+                                        <Button onclick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full' icon={<X size={20} /> } />
                                     </div>
                                     :
                                     <FileUploader endpoint={"imageUploader"} onchange={(value: any) => setImage(value)} />

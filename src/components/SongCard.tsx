@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
 import { loadUser } from '@/redux/actions/user.actions'
 import { useSession } from 'next-auth/react'
-
+import img from "../../public/20210712-1_1080p.mp4 25-12-2022 22_51_59.png"
 interface Props {
     song: {
         _id: string,
@@ -51,7 +51,12 @@ const SongCard: React.FC<Props> = ({ song }) => {
     return (
         <div className='group relative flex flex-col items-center justify-center rounded-xl overflow-hidden transition gap-x-4 p-2 cursor-pointer bg-neutral-400/5 hover:bg-neutral-400/10  '>
             <div onClick={handlePlay} className=' aspect-square rounded-lg overflow-hidden w-full h-full relative bg-slate-700'>
-                <Image src={song.image} alt='image' fill />
+                {
+                    song.image ?
+                        <Image src={song.image} alt='image' fill className=' object-cover' />
+                        :
+                        <Image alt='' src={img} fill className="object-cover" />
+                }
             </div>
             <div className=' w-full my-5 mt-5 flex justify-between'>
                 <div onClick={handlePlay} className=''>
