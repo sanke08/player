@@ -42,7 +42,6 @@ export default async function RootLayout({
               <div className=' fixed top-0 h-full w-[250px] hidden sm:block'>
                 <Sidebar />
                 <div className=' h-full bg-neutral-900 rounded-lg'>
-                  {/* @ts-ignore */}
                   <Library user={session?.user} />
                 </div>
               </div>

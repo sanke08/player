@@ -4,7 +4,7 @@ import LibrarySongCard from './LibrarySongCard'
 import { getSongsByUserId } from '@/lib/services/services'
 import LibraryWrapper from './LibraryWrapper'
 
-export default async function Library({ user }: { user: { email: string | undefined | null, name: string | undefined | null, _id?: string | undefined | null } | null | undefined }) {
+export default async function Library({ user }: { user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null } | null | undefined }) {
 
     // @ts-ignore
     const songs = await getSongsByUserId(user._id)
