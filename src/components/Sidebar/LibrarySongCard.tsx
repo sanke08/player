@@ -32,6 +32,7 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
         dispatch({ type: "PLAYER_LIST", payload: song })
     }
     const handleLike = async () => {
+        // @ts-ignore
         if (session?.user?._id) {
             setLike(!like)
             await axios.put("/api/file/handle-like", { songId: song._id })
@@ -39,8 +40,10 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
         }
     }
     useEffect(() => {
+        // @ts-ignore
         const Liked = session?.user?.liked?.find((value: any) => value === song._id)
         setLike(Liked)
+        // @ts-ignore
     }, [song._id, session?.user?.liked])
 
     return (

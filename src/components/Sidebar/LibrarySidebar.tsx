@@ -15,6 +15,7 @@ export default async function Library({ user }: { user: { email: string | undefi
             <Suspense fallback={<p>Loading......</p>}>
                 <div className=' h-full w-full rounded-xl p-2 flex flex-col gap-2 bg-neutral-900 pb-32'>
                     <LibraryHeader />
+                    {/*  @ts-ignore */}
                     <LibraryWrapper user={user}>
                         {
                             songs &&

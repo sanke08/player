@@ -14,6 +14,7 @@ import Image from 'next/image'
 import img from "../../../public/500x500.jpg"
 import Button from '../Button'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 
 
@@ -25,8 +26,7 @@ export default function Upload() {
 
     const router = useRouter()
     const dispatch = useDispatch()
-
-    const { user } = useSelector((state: any) => state.user)
+    const {data:session}=useSession()
     const { openUpload } = useSelector((state: any) => state.toggle)
     const [file, setfile] = useState<string>("")
     const [image, setImage] = useState<string>("")
@@ -38,7 +38,8 @@ export default function Upload() {
 
     const handleUpload = async () => {
         setLoading(true)
-        const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": user._id } })
+        // @ts-ignore
+        const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": session?.user?._id } })
         setLoading(false)
     }
 
@@ -59,7 +60,8 @@ export default function Upload() {
     return (
         <ModalWrapper isOpen={openUpload} headertext='Add Song' classname=' sm:w-[40rem]' close={handleClose}>
             {
-                user?._id ?
+                // @ts-ignore
+                session?.user?._id ?
                     <div className=' p-5 flex gap-4 flex-col justify-center w-full h-fit'>
                         <div className=' flex gap-4'>
                             <p className=' w-[30%]'>

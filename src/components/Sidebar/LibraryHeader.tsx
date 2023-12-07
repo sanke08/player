@@ -21,6 +21,7 @@ export default function LibraryHeader() {
                 }
             </div>
             {
+                // @ts-ignore
                 session?.user?.id &&
                 <div className=' flex items-center gap-2 '>
 
