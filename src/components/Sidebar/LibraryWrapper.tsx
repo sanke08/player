@@ -3,18 +3,21 @@ import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import LibrarySongCard from './LibrarySongCard'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
-const LibraryWrapper = ({ children, user }: { children: React.ReactNode, user: { name: string | null | undefined, _id: any } | null | undefined }) => {
+const LibraryWrapper = ({ children }: { children: React.ReactNode, }) => {
     const searchParams = useSearchParams()
     const [likedSongs, setLikedSongs] = useState([])
+    const { data: session } = useSession()
 
     useEffect(() => {
         const get = async () => {
-            const { data } = await axios.get("/api/file/get-liked", { headers: { "Authorization": user?._id } })
+            // @ts-ignore
+            const { data } = await axios.get("/api/file/get-liked", { headers: { "Authorization": session?.user?._id } })
             setLikedSongs(data?.songs)
         }
         get()
-    }, [user])
+    }, [session])
     return (
         <div className=' overflow-y-auto'>
             {

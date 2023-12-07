@@ -18,22 +18,6 @@ const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { e
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
     const router = useRouter()
-    // useEffect(() => {
-    //     const get = async () => {
-    //         // @ts-ignore
-    //         await loadUser({ token: token?.value })(dispatch)
-    //     }
-    //     get()
-    // }, [dispatch])
-    // const logout = async () => {
-    //     try {
-    //         await axios.get('/api/user/auth/logout')
-    //         router.refresh()
-    //     } catch (error: any) {
-    //         console.log(error.message);
-    //     }
-    // }
-
     return (
         <div className=''>
             <div className={twMerge(' fixed left-0 w-[0%] h-full top-16 bottom-0 lgt z-10 overflow-x-hidden sm:hidden', openMobile && "w-[100%] px-1 lgt")}>

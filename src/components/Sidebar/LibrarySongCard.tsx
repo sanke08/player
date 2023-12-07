@@ -1,7 +1,7 @@
 "use client"
 import { Heart, Play } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import img from "../../../public/500x500.jpg"
+// import img from "../../../public/500x500.jpg"
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
@@ -49,7 +49,7 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
     return (
         <div className=' group bg-neutral-400/5 rounded-md p-2 w-full flex items-center relative cursor-pointer gap-2 hover:bg-neutral-400/10 transition overflow-hidden'>
             <div onClick={handlePlay} className=' w-12 h-12 relative rounded-lg overflow-hidden'>
-                <Image src={img} alt='img' className='' />
+                <Image src={song.image} alt='img' className='' />
             </div>
             <div onClick={handlePlay}>
                 <p>

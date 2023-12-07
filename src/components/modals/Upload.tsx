@@ -1,8 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import app from '@/lib/firebase'
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import ModalWrapper from './ModalWrapper'
@@ -11,7 +8,6 @@ import { CLOSE_UPLOAD_FILE_MODAL, OPEN_LOGIN_MODAL } from '@/redux/constance'
 import FileUploader from '../FileUploader'
 import Input from '../Input'
 import Image from 'next/image'
-import img from "../../../public/500x500.jpg"
 import Button from '../Button'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
@@ -22,7 +18,6 @@ import { useSession } from 'next-auth/react'
 
 
 export default function Upload() {
-
 
     const router = useRouter()
     const dispatch = useDispatch()
@@ -56,6 +51,9 @@ export default function Upload() {
         dispatch({type:OPEN_LOGIN_MODAL})
     }
 
+    useEffect(()=>{
+
+    },[])
 
     return (
         <ModalWrapper isOpen={openUpload} headertext='Add Song' classname=' sm:w-[40rem]' close={handleClose}>

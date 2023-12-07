@@ -16,7 +16,7 @@ export default async function Library({ user }: { user: { email?: string | undef
                 <div className=' h-full w-full rounded-xl p-2 flex flex-col gap-2 bg-neutral-900 pb-32'>
                     <LibraryHeader />
                     {/*  @ts-ignore */}
-                    <LibraryWrapper user={user}>
+                    <LibraryWrapper>
                         {
                             songs &&
                             <div className=' gap-2 mt-1 grid grid-cols-1 w-full'>
