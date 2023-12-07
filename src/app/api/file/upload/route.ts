@@ -1,11 +1,10 @@
 import CONNECTION from "@/lib/connection"
 import { NextRequest, NextResponse } from "next/server"
-import jwt from "jsonwebtoken"
 import { File } from "@/lib/models/file"
 import { User } from "@/lib/models/user"
 import { getAuthSession } from "@/lib/auth"
 
-
+export const dynamic ="force-static"
 export const POST = async (req: NextRequest) => {
     try {
         await CONNECTION()

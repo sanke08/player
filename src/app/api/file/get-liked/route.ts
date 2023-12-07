@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { User } from "@/lib/models/user";
 import { getAuthSession } from "@/lib/auth";
 
+export const dynamic ="force-static"
+
 export const GET = async (req: NextRequest) => {
     try {
         const session = await getAuthSession()

@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { User } from "@/lib/models/user"
 import CONNECTION from "@/lib/connection"
 import { getAuthSession } from "@/lib/auth"
-
+export const dynamic ="force-static"
 export const GET = async (req: NextRequest) => {
     try {
         const session = await getAuthSession()
