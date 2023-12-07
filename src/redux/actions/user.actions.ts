@@ -5,7 +5,6 @@ export const loginAction = ({ email, password }: { email: string, password: any 
     try {
         dispatch({ type: LOGIN_REQUEST })
         const { data } = await axios.post("/api/user/auth/login", { email, password })
-        console.log(data)
         dispatch({ type: LOGIN_SUCCESS, payload: data.user })
     } catch (error: any) {
         dispatch({ type: LOGIN_FAIL, payload: error.response.data.message })

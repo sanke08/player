@@ -24,27 +24,30 @@ interface Props {
 const SongCard: React.FC<Props> = ({ song }) => {
     const router = useRouter()
     const dispatch = useDispatch()
-    const { user } = useSelector((state: any) => state.user)
+    const { data: session } = useSession()
     const [like, setLike] = useState(false)
     const handleLike = async () => {
-        if (user?._id) {
+        // @ts-ignore
+        if (session?.user?._id) {
             setLike(!like)
-            await axios.put("/api/file/handle-like", { songId: song._id })
-            router.refresh()
             // @ts-ignore
-            // await loadUser({ id: session?.user?.id })(dispatch)
+            await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": session.user._id } })
+            router.refresh()
         }
     }
     const handlePlay = () => {
-        if (!user?._id) {
+        // @ts-ignore
+        if (!session?.user?._id) {
             return toast.error("Please Login")
         }
         dispatch({ type: "PLAYER_LIST", payload: song })
     }
     useEffect(() => {
-        const Liked = user?.liked?.find((value: any) => value === song._id)
-        setLike(Liked)
-    }, [song._id, user?.liked])
+        // @ts-ignore
+        const liked = session?.user?.liked.find((value: any) => value === song._id)
+        // const Liked = user?.liked?
+        setLike(liked)
+    }, [song._id, session])
     return (
         <div className='group relative flex flex-col items-center justify-center rounded-xl overflow-hidden transition gap-x-4 p-2 cursor-pointer bg-neutral-400/5 hover:bg-neutral-400/10  '>
             <div onClick={handlePlay} className=' aspect-square rounded-lg overflow-hidden w-full h-full relative bg-slate-700'>

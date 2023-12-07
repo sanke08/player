@@ -7,7 +7,7 @@ import LibraryWrapper from './LibraryWrapper'
 export default async function Library({ user }: { user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null } | null | undefined }) {
 
     // @ts-ignore
-    const songs = await getSongsByUserId(user._id)
+    const songs = await getSongsByUserId(user?._id)
     // if (!songs) return
 
     return (

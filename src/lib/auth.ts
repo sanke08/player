@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
             }
         },
         redirect() {
-            return "https://player-sanketgawande08-gmailcom.vercel.app/"
+            return "/"
         }
     }
 }

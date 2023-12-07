@@ -1,14 +1,12 @@
 import CONNECTION from "@/lib/connection";
 import { File } from "@/lib/models/file";
 import { NextRequest, NextResponse } from "next/server";
-
 import { User } from "@/lib/models/user";
-import { getAuthSession } from "@/lib/auth";
 
 export const PUT = async (req: NextRequest) => {
     try {
         await CONNECTION()
-        const { songId } =await req.json()
+        const { songId } = await req.json()
         if (!songId) {
             return NextResponse.json({ message: "no ID provided" })
         }
@@ -24,10 +22,10 @@ export const PUT = async (req: NextRequest) => {
 
         if (!user.liked.includes(songId)) {
             await User.findByIdAndUpdate(user._id, { $push: { liked: songId } }, { new: true })
-            return NextResponse.json({ success: true,  message: "Add to Like Playlist" })
+            return NextResponse.json({ success: true, message: "Add to Like Playlist" })
         } else {
             await User.findByIdAndUpdate(user._id, { $pull: { liked: songId } }, { new: true })
-            return NextResponse.json({ success: true,  message: "Removed from Like Playlist" })
+            return NextResponse.json({ success: true, message: "Removed from Like Playlist" })
         }
 
     } catch (error: any) {

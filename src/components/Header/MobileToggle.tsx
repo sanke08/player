@@ -13,7 +13,7 @@ import { signIn, signOut } from 'next-auth/react'
 
 
 
-const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email: string | undefined | null, name: string | undefined | null, _id?: string | undefined | null } | null | undefined }) => {
+const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null } | null | undefined }) => {
 
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
@@ -57,14 +57,14 @@ const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { e
                 {
                     user?._id ?
                         <div className=' flex items-center gap-5'>
-                            <Button title='Logout' style onclick={() => {signOut();router.refresh()}} />
+                            <Button title='Logout' style onclick={() => { signOut(); router.refresh() }} />
                             <UserCircle />
                         </div>
                         :
                         <div className=' flex gap-3'>
                             {/* <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
                             <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline /> */}
-                            <Button title='Login' style onclick={() => {signIn("google")}} />
+                            <Button title='Login' style onclick={() => { signIn("google") }} />
                         </div>
                 }
             </div>

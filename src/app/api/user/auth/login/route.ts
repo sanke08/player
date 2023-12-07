@@ -13,7 +13,6 @@ export const POST = async (req: NextRequest) => {
         await CONNECTION()
         const user = await User.findOne({ email: email })
         if (!user) throw new Error("Couldn't find")
-        console.log("enter")
         const matchPassword = await bcryptjs.compare(password, user.password)
         if (!matchPassword) throw new Error("invalid credentials")
         const token = await jwt.sign({ id: user._id }, process.env.SECRETE_KEY!)

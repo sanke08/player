@@ -5,9 +5,10 @@ import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Button from '../Button'
 
 export default function LibraryHeader() {
-    const {data:session}=useSession()
+    const { data: session } = useSession()
     const dispatch = useDispatch()
     const searchParams = useSearchParams()
     const router = useRouter()
@@ -22,7 +23,7 @@ export default function LibraryHeader() {
             </div>
             {
                 // @ts-ignore
-                session?.user?.id &&
+                session?.user?._id &&
                 <div className=' flex items-center gap-2 '>
 
                     {
@@ -31,7 +32,7 @@ export default function LibraryHeader() {
                             :
                             <Heart size={20} onClick={() => router.push("?liked=true")} className=' cursor-pointer opacity-50 hover:opacity-100' />
                     }
-                    <button onClick={() => { dispatch({ type: OPEN_UPLOAD_FILE_MODAL }) }} className=' cursor-pointer opacity-50 hover:opacity-100 transition'><FolderPlus size={23} />  </button>
+                    <Button onclick={() => { dispatch({ type: OPEN_UPLOAD_FILE_MODAL }) }} icon={<FolderPlus size={23} />} className=' cursor-pointer opacity-50 p-0 m-0 min-w-fit hover:opacity-100 transition' />
                 </div>
             }
         </div>

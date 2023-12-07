@@ -4,17 +4,17 @@ import React, { Suspense, useEffect, useState } from 'react'
 import LibrarySongCard from './LibrarySongCard'
 import axios from 'axios'
 
-const LibraryWrapper = ({ children, user: me }: { children: React.ReactNode, user: { name: string | null | undefined, _id: any } | null | undefined }) => {
+const LibraryWrapper = ({ children, user }: { children: React.ReactNode, user: { name: string | null | undefined, _id: any } | null | undefined }) => {
     const searchParams = useSearchParams()
     const [likedSongs, setLikedSongs] = useState([])
 
     useEffect(() => {
         const get = async () => {
-            const { data } = await axios.get("/api/file/get-liked", { headers: { "Authorization": me?._id } })
+            const { data } = await axios.get("/api/file/get-liked", { headers: { "Authorization": user?._id } })
             setLikedSongs(data?.songs)
         }
         get()
-    }, [me])
+    }, [user])
     return (
         <div className=' overflow-y-auto'>
             {
