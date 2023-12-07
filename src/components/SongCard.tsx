@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { HeartIcon, PlayCircle } from 'lucide-react'
+import { HeartIcon, Loader2, PlayCircle } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -25,13 +25,15 @@ const SongCard: React.FC<Props> = ({ song }) => {
     const router = useRouter()
     const dispatch = useDispatch()
     const { data: session } = useSession()
-    const [like, setLike] = useState(false)
+    const [like, setLike] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     const handleLike = async () => {
         // @ts-ignore
         if (session?.user?._id) {
-            setLike(!like)
+            setLoading(true)
             // @ts-ignore
-            await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": session.user._id } })
+            const { data } = await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": session.user._id } })
+            setLoading(false)
             router.refresh()
         }
     }
@@ -45,7 +47,6 @@ const SongCard: React.FC<Props> = ({ song }) => {
     useEffect(() => {
         // @ts-ignore
         const liked = session?.user?.liked.find((value: any) => value === song._id)
-        // const Liked = user?.liked?
         setLike(liked)
     }, [song._id, session])
     return (
@@ -68,10 +69,19 @@ const SongCard: React.FC<Props> = ({ song }) => {
                     </p>
                 </div>
                 {
-                    like ?
-                        <HeartIcon color='' onClick={handleLike} className={twMerge(' sm:-translate-y-5 right-4 absolute sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500  ', like && "fill-green-500")} />
+                    loading ?
+                        <Loader2 className=' animate-spin mr-2' />
                         :
-                        <HeartIcon onClick={handleLike} className={twMerge(' sm:-translate-y-5 right-4 absolute sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500  ', like && "fill-green-500")} />
+                        <div>
+
+
+                            {
+                                like ?
+                                    <HeartIcon color='' onClick={handleLike} className={twMerge(' sm:-translate-y-5 right-4 absolute sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500  ', like && "fill-green-500")} />
+                                    :
+                                    <HeartIcon onClick={handleLike} className={twMerge(' sm:-translate-y-5 right-4 absolute sm:opacity-0 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500  ', like && "fill-green-500")} />
+                            }
+                        </div>
                 }
             </div>
             <div onClick={handlePlay} className='absolute w-7 h-7 bg-green-500 rounded-full flex justify-center items-center opacity-0 drop-shadow-md translate translate-y-1/3 overflow-hidden group-hover:opacity-100 group-hover:translate-y-0 hover:scale-110  right-4  bottom-24 transition-all duration-500 '>

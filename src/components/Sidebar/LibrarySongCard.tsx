@@ -1,5 +1,5 @@
 "use client"
-import { Heart, Play } from 'lucide-react'
+import { Heart, Loader2, Play } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 // import img from "../../../public/500x500.jpg"
 import Image from 'next/image'
@@ -28,21 +28,24 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { data: session } = useSession()
-    const [like, setLike] = useState(false)
+    const [like, setLike] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     const handlePlay = () => {
         // @ts-ignore
-        if (session?.user?._id) {   
+        if (session?.user?._id) {
             dispatch({ type: "PLAYER_LIST", payload: song })
-        }else{
+        } else {
             return toast.error("Please Login")
         }
-    } 
+    }
     const handleLike = async () => {
         // @ts-ignore
         if (session?.user?._id) {
-            setLike(!like)
+            setLoading(true)
+            setLike((pre)=>!pre)
             // @ts-ignore
             await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": session.user._id } })
+            setLoading(false)
             router.refresh()
         }
     }
@@ -68,10 +71,18 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
             </div>
             <div className=' absolute right-5 flex gap-1 '>
                 {
-                    like ?
-                        <Heart onClick={handleLike} size={20} className=' fill-green-500 delay-100 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' color='' />
+                    loading ?
+                        <Loader2 size={20} className=' animate-spin' />
                         :
-                        <Heart onClick={handleLike} size={20} className='sm:opacity-0 delay-100 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' />
+
+                        <div>
+                            {
+                                like ?
+                                    <Heart onClick={handleLike} size={20} className=' fill-green-500 delay-100 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' color='' />
+                                    :
+                                    <Heart onClick={handleLike} size={20} className='sm:opacity-0 delay-100 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' />
+                            }
+                        </div>
                 }
                 <Play onClick={handlePlay} size={20} className='fill-green-500 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' color='' />
             </div>

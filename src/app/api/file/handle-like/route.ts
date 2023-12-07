@@ -27,7 +27,6 @@ export const PUT = async (req: NextRequest) => {
             await User.findByIdAndUpdate(user._id, { $pull: { liked: songId } }, { new: true })
             return NextResponse.json({ success: true, message: "Removed from Like Playlist" })
         }
-
     } catch (error: any) {
         console.log(error)
         return NextResponse.json({ success: false, message: error.message })

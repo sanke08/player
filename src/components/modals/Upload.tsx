@@ -11,6 +11,7 @@ import Image from 'next/image'
 import Button from '../Button'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
+import toast from 'react-hot-toast'
 
 
 
@@ -21,7 +22,7 @@ export default function Upload() {
 
     const router = useRouter()
     const dispatch = useDispatch()
-    const {data:session}=useSession()
+    const { data: session } = useSession()
     const { openUpload } = useSelector((state: any) => state.toggle)
     const [file, setfile] = useState<string>("")
     const [image, setImage] = useState<string>("")
@@ -32,10 +33,15 @@ export default function Upload() {
 
 
     const handleUpload = async () => {
+        if (!file || !image || !artistName || !fileName) {
+            return toast.error("Provide all files")
+        }
         setLoading(true)
         // @ts-ignore
         const { data } = await axios.post("/api/file/upload", { file, image, fileName, artistName }, { headers: { "Authorization": session?.user?._id } })
         setLoading(false)
+        router.refresh()
+        handleClose()
     }
 
     const handleClose = () => {
@@ -45,15 +51,12 @@ export default function Upload() {
         setArtistName("")
         dispatch({ type: CLOSE_UPLOAD_FILE_MODAL })
     }
-    
-    const changeToLogin=()=>{
+
+    const changeToLogin = () => {
         dispatch({ type: CLOSE_UPLOAD_FILE_MODAL })
-        dispatch({type:OPEN_LOGIN_MODAL})
+        dispatch({ type: OPEN_LOGIN_MODAL })
     }
 
-    useEffect(()=>{
-
-    },[])
 
     return (
         <ModalWrapper isOpen={openUpload} headertext='Add Song' classname=' sm:w-[40rem]' close={handleClose}>
@@ -81,7 +84,7 @@ export default function Upload() {
                                 image ?
                                     <div className=' relative w-28 h-28  rounded-lg overflow-hidden'>
                                         <Image src={image} alt='Img' fill />
-                                        <Button onclick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full' icon={<X size={20} /> } />
+                                        <Button onclick={() => setImage("")} className=' absolute right-1 top-1 bg-rose-500 rounded-full' icon={<X size={20} />} />
                                     </div>
                                     :
                                     <FileUploader endpoint={"imageUploader"} onchange={(value: any) => setImage(value)} />
@@ -98,7 +101,7 @@ export default function Upload() {
                                     <FileUploader endpoint={"audioUploader"} onchange={(value: any) => setfile(value)} />
                             }
                         </div>
-                        <Button title='Upload' style onclick={handleUpload} loading={loading} disable={!fileName || !artistName || !file || !image} />
+                        <Button title={!fileName || !artistName || !file || !image?"Fill all Detail":'Upload'} style onclick={handleUpload} loading={loading} disable={!fileName || !artistName || !file || !image} />
                         {/* <div className=' text-center'>
                     Extreamly sorry you can't Add your song right now because developer's  data storage limit has been reach
                     <div className=' mt-5'>
@@ -113,7 +116,6 @@ export default function Upload() {
                     <div className=' w-full space-y-3'>
                         <p className=' w-max mx-auto text-neutral-500'>Login to upload song</p>
                         <Button title='Login' onclick={changeToLogin} style className=' mx-auto' />
-
                     </div>
             }
         </ModalWrapper>
