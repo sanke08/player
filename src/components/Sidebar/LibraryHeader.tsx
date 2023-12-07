@@ -1,33 +1,26 @@
 "use client"
 import { OPEN_UPLOAD_FILE_MODAL } from '@/redux/constance'
-import { ChevronLeft, FolderPlus, Heart, HeartIcon } from 'lucide-react'
-import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {  FolderPlus, Heart } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, } from 'react-redux'
 import Button from '../Button'
 
-export default function LibraryHeader() {
-    const { data: session } = useSession()
+export default function LibraryHeader({ user }: any) {
     const dispatch = useDispatch()
-    const searchParams = useSearchParams()
+    const pathname=usePathname()
     const router = useRouter()
     return (
         <div className=' flex justify-between w-full'>
             <div className=' w-max'>
-                {
-                    searchParams.get("liked") ?
-                        <p>Liked Songs</p> :
-                        <p>Your library</p>
-                }
+                <p>Your library</p>
             </div>
             {
                 // @ts-ignore
-                session?.user?._id &&
+                user?._id &&
                 <div className=' flex items-center gap-2 '>
-
                     {
-                        searchParams.get("liked") ?
+                      pathname==="/liked" ?
                             <Heart size={23} onClick={() => router.push("/")} color='' className=' cursor-pointer fill-green-500' />
                             :
                             <Heart size={20} onClick={() => router.push("/liked")} className=' cursor-pointer opacity-50 hover:opacity-100' />
