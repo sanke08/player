@@ -30,7 +30,7 @@ export default function LibraryHeader() {
                         searchParams.get("liked") ?
                             <Heart size={23} onClick={() => router.push("/")} color='' className=' cursor-pointer fill-green-500' />
                             :
-                            <Heart size={20} onClick={() => router.push("?liked=true")} className=' cursor-pointer opacity-50 hover:opacity-100' />
+                            <Heart size={20} onClick={() => router.push("/liked")} className=' cursor-pointer opacity-50 hover:opacity-100' />
                     }
                     <Button onclick={() => { dispatch({ type: OPEN_UPLOAD_FILE_MODAL }) }} icon={<FolderPlus size={23} />} className=' cursor-pointer opacity-50 p-0 m-0 min-w-fit hover:opacity-100 transition' />
                 </div>

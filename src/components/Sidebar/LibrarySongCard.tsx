@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { loadUser } from '@/redux/actions/user.actions'
 import { useSession } from 'next-auth/react'
+import toast from 'react-hot-toast'
 interface Props {
     song: {
         _id: string,
@@ -29,13 +30,19 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
     const { data: session } = useSession()
     const [like, setLike] = useState(false)
     const handlePlay = () => {
-        dispatch({ type: "PLAYER_LIST", payload: song })
-    }
+        // @ts-ignore
+        if (session?.user?._id) {   
+            dispatch({ type: "PLAYER_LIST", payload: song })
+        }else{
+            return toast.error("Please Login")
+        }
+    } 
     const handleLike = async () => {
         // @ts-ignore
         if (session?.user?._id) {
             setLike(!like)
-            await axios.put("/api/file/handle-like", { songId: song._id })
+            // @ts-ignore
+            await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": session.user._id } })
             router.refresh()
         }
     }
@@ -49,7 +56,7 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
     return (
         <div className=' group bg-neutral-400/5 rounded-md p-2 w-full flex items-center relative cursor-pointer gap-2 hover:bg-neutral-400/10 transition overflow-hidden'>
             <div onClick={handlePlay} className=' w-12 h-12 relative rounded-lg overflow-hidden'>
-                <Image src={song.image} alt='img' className='' />
+                <Image src={song.image} alt='img' className='' fill />
             </div>
             <div onClick={handlePlay}>
                 <p>
