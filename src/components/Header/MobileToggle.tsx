@@ -14,7 +14,7 @@ import Image from 'next/image'
 
 
 
-const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null, image: string | undefined | null } | null | undefined }) => {
+const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null, image?: string | undefined | null } | null | undefined }) => {
 
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
