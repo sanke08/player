@@ -26,8 +26,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const token = cookies().get("music_auth_token") 
-console.log(token)
+  const session=await getAuthSession()
   return (
     <ReduxProvider>
       <html lang="en" >
@@ -43,12 +42,13 @@ console.log(token)
               <div className=' fixed top-0 h-full w-[250px] hidden sm:block'>
                 <Sidebar />
                 <div className=' h-full bg-neutral-900 rounded-lg'>
-                  <Library token={token}/>
+                  {/* @ts-ignore */}
+                  <Library user={session?.user}/>
                 </div>
               </div>
               <div className=' w-full py-1 h-full sm:pl-[253px]'>
                 <div className='  bg-neutral-900 rounded-xl pb-20'>
-                  <Header token={token}/>
+                  <Header user={session?.user}/>
                   <div className=' w-full h-full min-h-[75vh] rounded-xl '>
                     {children}
                   </div>

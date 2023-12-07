@@ -1,12 +1,13 @@
 "use client"
 import { OPEN_UPLOAD_FILE_MODAL } from '@/redux/constance'
 import { ChevronLeft, FolderPlus, Heart, HeartIcon } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function LibraryHeader() {
-    const { user } = useSelector((state: any) => state.user)
+    const {data:session}=useSession()
     const dispatch = useDispatch()
     const searchParams = useSearchParams()
     const router = useRouter()
@@ -20,7 +21,7 @@ export default function LibraryHeader() {
                 }
             </div>
             {
-                user?._id &&
+                session?.user?.id &&
                 <div className=' flex items-center gap-2 '>
 
                     {

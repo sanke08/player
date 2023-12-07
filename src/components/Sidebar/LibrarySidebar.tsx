@@ -4,10 +4,10 @@ import LibrarySongCard from './LibrarySongCard'
 import { getSongsByUserId } from '@/lib/services/services'
 import LibraryWrapper from './LibraryWrapper'
 
-export default async function Library({ token }: { token: { name: string, value: any } | null | undefined }) {
+export default async function Library({ user }: { user: { email: string | undefined | null, name: string | undefined | null, _id?: string | undefined | null } | null | undefined }) {
 
     // @ts-ignore
-    const songs = await getSongsByUserId(token?.value)
+    const songs = await getSongsByUserId(user._id)
     // if (!songs) return
 
     return (
@@ -15,7 +15,7 @@ export default async function Library({ token }: { token: { name: string, value:
             <Suspense fallback={<p>Loading......</p>}>
                 <div className=' h-full w-full rounded-xl p-2 flex flex-col gap-2 bg-neutral-900 pb-32'>
                     <LibraryHeader />
-                    <LibraryWrapper token={token}>
+                    <LibraryWrapper user={user}>
                         {
                             songs &&
                             <div className=' gap-2 mt-1 grid grid-cols-1 w-full'>

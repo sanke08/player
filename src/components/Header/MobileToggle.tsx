@@ -8,32 +8,31 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button'
 import { twMerge } from 'tailwind-merge'
+import { signIn, signOut } from 'next-auth/react'
 
 
 
 
-
-const MobileToggle = ({ children, token }: { children: React.ReactNode, token: { name: string, value: any } | null | undefined }) => {
+const MobileToggle = ({ children, user }: { children: React.ReactNode, user: { email: string | undefined | null, name: string | undefined | null, _id?: string | undefined | null } | null | undefined }) => {
 
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
-    const { user } = useSelector((state: any) => state.user)
     const router = useRouter()
-    useEffect(() => {
-        const get = async () => {
-            // @ts-ignore
-            await loadUser({ token: token?.value })(dispatch)
-        }
-        get()
-    }, [dispatch, token])
-    const logout = async () => {
-        try {
-            await axios.get('/api/user/auth/logout')
-            router.refresh()
-        } catch (error: any) {
-            console.log(error.message);
-        }
-    }
+    // useEffect(() => {
+    //     const get = async () => {
+    //         // @ts-ignore
+    //         await loadUser({ token: token?.value })(dispatch)
+    //     }
+    //     get()
+    // }, [dispatch])
+    // const logout = async () => {
+    //     try {
+    //         await axios.get('/api/user/auth/logout')
+    //         router.refresh()
+    //     } catch (error: any) {
+    //         console.log(error.message);
+    //     }
+    // }
 
     return (
         <div className=''>
@@ -58,13 +57,14 @@ const MobileToggle = ({ children, token }: { children: React.ReactNode, token: {
                 {
                     user?._id ?
                         <div className=' flex items-center gap-5'>
-                            <Button title='Logout' style onclick={logout} />
+                            <Button title='Logout' style onclick={() => {signOut();router.refresh()}} />
                             <UserCircle />
                         </div>
                         :
                         <div className=' flex gap-3'>
-                            <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
-                            <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline />
+                            {/* <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
+                            <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline /> */}
+                            <Button title='Login' style onclick={() => {signIn("google")}} />
                         </div>
                 }
             </div>

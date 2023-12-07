@@ -4,11 +4,11 @@ import Library from '../Sidebar/LibrarySidebar'
 
 
 
-const Header = ({token}:{token:{ name: string, value: any } | null | undefined }) => {
+const Header = ({ user }: { user: { email: string | undefined | null, name: string | undefined | null, _id?: string | undefined | null } | null | undefined }) => {
 
     return (
-        <MobileToggle token={token}>
-            <Library  token={token}/>
+        <MobileToggle user={user}>
+            <Library  user={user}/>
         </MobileToggle>
     )
 }

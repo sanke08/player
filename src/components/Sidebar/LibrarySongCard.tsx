@@ -24,7 +24,6 @@ interface Props {
 
 
 const LibrarySongCard: React.FC<Props> = ({ song }) => {
-    const { user } = useSelector((state: any) => state.user)
     const dispatch = useDispatch()
     const router = useRouter()
     const { data: session } = useSession()
@@ -33,16 +32,16 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
         dispatch({ type: "PLAYER_LIST", payload: song })
     }
     const handleLike = async () => {
-        if (user._id) {
+        if (session?.user?._id) {
             setLike(!like)
             await axios.put("/api/file/handle-like", { songId: song._id })
             router.refresh()
         }
     }
     useEffect(() => {
-        const Liked = user?.liked?.find((value: any) => value === song._id)
+        const Liked = session?.user?.liked?.find((value: any) => value === song._id)
         setLike(Liked)
-    }, [song._id, user?.liked])
+    }, [song._id, session?.user?.liked])
 
     return (
         <div className=' group bg-neutral-400/5 rounded-md p-2 w-full flex items-center relative cursor-pointer gap-2 hover:bg-neutral-400/10 transition overflow-hidden'>

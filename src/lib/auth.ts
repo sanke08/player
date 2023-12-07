@@ -19,13 +19,7 @@ export const authOptions: NextAuthOptions = {
             const isExist = await User.findOne({ email: session.user?.email })
             if (isExist) {
                 // @ts-ignore
-                session.user.id = isExist.id
-                // @ts-ignore
-                session.user.name = isExist.name
-                // @ts-ignore
-                session.user.email = isExist.email
-                // @ts-ignore
-                session.user.image = isExist.image
+                session.user = isExist
             }
             return session
         },

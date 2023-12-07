@@ -1,24 +1,20 @@
 "use client"
 import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import LibrarySongCard from './LibrarySongCard'
 import axios from 'axios'
 
-const LibraryWrapper = ({ children, token }: { children: React.ReactNode, token: { name: string, value: any } | null | undefined }) => {
+const LibraryWrapper = ({ children, user: me }: { children: React.ReactNode, user: { name: string | null | undefined, _id: any } | null | undefined }) => {
     const searchParams = useSearchParams()
-    const { user } = useSelector((state: any) => state.user)
     const [likedSongs, setLikedSongs] = useState([])
 
-
     useEffect(() => {
-        setLikedSongs(user?.likedSongs)
         const get = async () => {
-            const { data } = await axios.get("/api/file/get-liked", { headers: { "Authorization": token?.value } })
+            const { data } = await axios.get("/api/file/get-liked", { headers: { "Authorization": me?._id } })
             setLikedSongs(data?.songs)
         }
         get()
-    }, [user, token])
+    }, [me])
     return (
         <div className=' overflow-y-auto'>
             {
