@@ -2,16 +2,14 @@ import { NextResponse, NextRequest } from "next/server"
 import jwt from "jsonwebtoken"
 import { User } from "@/lib/models/user"
 import CONNECTION from "@/lib/connection"
-import { getAuthSession } from "@/lib/auth"
-export const dynamic ="force-static"
 export const GET = async (req: NextRequest) => {
     try {
-        const session = await getAuthSession()
-        if (!session) return NextResponse.json({ message: "Plese Login", success: false })
+        const token = req.cookies.get("music_auth_token")?.value || '';
+        const decodedToken: any = jwt.verify(token, process.env.SECRETE_KEY!);
 
         await CONNECTION()
         // @ts-ignore
-        const user = await User.findById(session?.user?.id)
+        const user = await User.findById(decodedToken.id)
         return NextResponse.json({ success: true, user })
     } catch (error: any) {
         return NextResponse.json({ message: error.message, success: false })

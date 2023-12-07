@@ -1,8 +1,7 @@
-import { cookies } from "next/headers"
 import { LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_FAIL, REGISTER_REQUEST, REGISTER_SUCCESS } from "../constance"
 import axios from "axios"
 
-export const loginAction = ({ email, password }: { email: string, password: string }) => async (dispatch: any) => {
+export const loginAction = ({ email, password }: { email: string, password: any }) => async (dispatch: any) => {
     try {
         dispatch({ type: LOGIN_REQUEST })
         const { data } = await axios.post("/api/user/auth/login", { email, password })
@@ -24,7 +23,7 @@ export const registerAction = ({ email, password, name }: { email: string, passw
     }
 }
 
-export const loadUser = ({ id }: { id: any }) => async (dispatch: any) => {
+export const loadUser = ({ token }: { token: any }) => async (dispatch: any) => {
     try {
         dispatch({ type: LOAD_USER_REQUEST })
         const { data } = await axios.get("/api/user/auth/me")

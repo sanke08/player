@@ -18,8 +18,7 @@ export const POST = async (req: NextRequest) => {
         if (existUser) throw new Error("User Already Exists")
         const user = await User.create({ email, name, password })
         const token = await jwt.sign({ id: user._id }, process.env.SECRETE_KEY!)
-        cookies().set("music_auth_token", token, { expires: new Date(Date.now() + 24 * 60 * 60 * 1000), httpOnly: true, secure: true })
-        return NextResponse.json({ user, message: "Register Successfully", success: true })
+        return NextResponse.json({ user, message: "Register Successfully", success: true }).cookies.set("music_auth_token", token, { expires: new Date(Date.now() + 24 * 60 * 60 * 1000), httpOnly: true, secure: true })
     } catch (error: any) {
         return NextResponse.json({ success: false, message: error.message }, { status: 400 })
     }

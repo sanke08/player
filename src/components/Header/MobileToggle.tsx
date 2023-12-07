@@ -8,14 +8,13 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button'
 import { twMerge } from 'tailwind-merge'
-import { signIn, signOut, useSession } from "next-auth/react"
 
 
 
 
 
-const MobileToggle = ({ children }: { children: React.ReactNode }) => {
-    const { data: session } = useSession()
+const MobileToggle = ({ children, token }: { children: React.ReactNode, token: { name: string, value: any } | null | undefined }) => {
+
     const dispatch = useDispatch()
     const { openMobile } = useSelector((state: any) => state.toggle)
     const { user } = useSelector((state: any) => state.user)
@@ -23,10 +22,18 @@ const MobileToggle = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const get = async () => {
             // @ts-ignore
-            await loadUser({ id: session?.user?.id })(dispatch)
+            await loadUser({ token: token?.value })(dispatch)
         }
         get()
-    }, [dispatch, session])
+    }, [dispatch, token])
+    const logout = async () => {
+        try {
+            await axios.get('/api/user/auth/logout')
+            router.refresh()
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
 
     return (
         <div className=''>
@@ -51,14 +58,13 @@ const MobileToggle = ({ children }: { children: React.ReactNode }) => {
                 {
                     user?._id ?
                         <div className=' flex items-center gap-5'>
-                            <Button title='Logout' style onclick={() => signOut()} />
+                            <Button title='Logout' style onclick={logout} />
                             <UserCircle />
                         </div>
                         :
                         <div className=' flex gap-3'>
-                            {/* <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
-                            <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline /> */}
-                            <Button title='Login' onclick={() => signIn("google")} style />
+                            <Button title='Login' onclick={() => { dispatch({ type: OPEN_LOGIN_MODAL }) }} style />
+                            <Button title='Register' onclick={() => { dispatch({ type: OPEN_REGISTER_MODAL }) }} outline />
                         </div>
                 }
             </div>
