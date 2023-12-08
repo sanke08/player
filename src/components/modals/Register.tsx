@@ -1,14 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
 import Input from '../Input'
 import Button from '../Button'
 import ModalWrapper from './ModalWrapper'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
 import { registerAction } from '@/redux/actions/user.actions'
-import { CLEAR_ERROR, CLOSE_REGISTER_MODAL, OPEN_LOGIN_MODAL } from '@/redux/constance'
+import {  CLOSE_REGISTER_MODAL, OPEN_LOGIN_MODAL } from '@/redux/constance'
 
 
 

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { toast } from "react-hot-toast"
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
-import { Loader2, X } from 'lucide-react'
 import ModalWrapper from './ModalWrapper'
 import Input from '../Input'
 import Button from '../Button'

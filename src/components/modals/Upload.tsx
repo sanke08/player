@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import ModalWrapper from './ModalWrapper'
@@ -12,7 +12,6 @@ import Button from '../Button'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-import img from "../../../public/500x500.jpg"
 
 
 

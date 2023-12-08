@@ -4,16 +4,16 @@ import LibrarySongCard from './LibrarySongCard'
 import { getSongsByUserId } from '@/lib/services/services'
 
 
-export default async function Library({ user }: { user: { email?: string | undefined | null, name?: string | undefined | null, _id?: string | undefined | null } | null | undefined }) {
+export default async function Library({ userId }: any) {
 
     // @ts-ignore
-    const songs = await getSongsByUserId(user?._id)
+    const songs = await getSongsByUserId(userId)
 
     return (
-        <div className=' bg-neutral-900 h-full rounded-xl'>
-            <Suspense fallback={<p>Loading......</p>}>
+        <Suspense fallback={<p>Loading......</p>}>
+            <div className=' bg-neutral-900 h-full rounded-xl'>
                 <div className=' h-full w-full rounded-xl p-2 flex flex-col gap-2 bg-neutral-900 pb-32'>
-                    <LibraryHeader user={user} />
+                    <LibraryHeader userId={userId} />
                     {
                         // @ts-ignore
                         songs?.length < 1 &&
@@ -29,11 +29,10 @@ export default async function Library({ user }: { user: { email?: string | undef
                                     <LibrarySongCard key={song._id} song={song} />
                                 ))
                             }
-
                         </div>
                     }
                 </div>
-            </Suspense>
-        </div>
+            </div>
+        </Suspense>
     )
 }

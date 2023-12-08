@@ -1,10 +1,9 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import img from "../../public/assets/5337992.jpg"
 import { useDispatch, useSelector } from 'react-redux'
 // @ts-ignore
 import useSound from "use-sound"
-import { Forward, PauseCircle, PlayCircle, StepBack, StepForward } from 'lucide-react'
+import {  PauseCircle, PlayCircle, StepBack, StepForward } from 'lucide-react'
 
 
 
@@ -79,7 +78,6 @@ export default function PlayerContent({ songUrl, song }: { songUrl: string, song
                     <div className=' relative w-20 object-contain aspect-square'>
                         <Image src={song?.image} alt='' fill className='' />
                     </div>
-                    {/* <Image src={img} alt='' height={52} width={52} className=' ' /> */}
                     <div className=' w-full'>
                         {song?.title}
                         <p className=' flex text-xs opacity-40'>
@@ -99,9 +97,7 @@ export default function PlayerContent({ songUrl, song }: { songUrl: string, song
                     </button>
                     <StepForward size={"full"} onClick={forward} className=' w-7 h-7 cursor-pointer' />
                 </div>
-                <div className=' w-44 items-center sm:flex hidden'>
-                    {/* <HiSpeakerXMark onClick={toggleVol} /> <Slider value={volume} onchange={(value) => setVolume(value)} /> */}
-                </div>
+               
             </div>
         </div>
     )
