@@ -1,5 +1,5 @@
 "use client"
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import ModalWrapper from './ModalWrapper'
@@ -10,7 +10,7 @@ import Input from '../Input'
 import Image from 'next/image'
 import Button from '../Button'
 import axios from 'axios'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
 
 
@@ -55,12 +55,11 @@ export default function Upload() {
 
     const changeToLogin = () => {
         dispatch({ type: CLOSE_UPLOAD_FILE_MODAL })
-        dispatch({ type: OPEN_LOGIN_MODAL })
     }
 
 
     return (
-        <ModalWrapper isOpen={openUpload} headertext='Add Song' classname=' sm:w-[40rem]' close={handleClose}>
+        <ModalWrapper isOpen={openUpload} headertext='Add Song' classname=' sm:w-[40rem] w-full px-3 md:px-10' close={handleClose}>
             {
                 // @ts-ignore
                 session?.user?._id ?
@@ -69,13 +68,13 @@ export default function Upload() {
                             <p className=' w-[30%]'>
                                 Name :
                             </p>
-                            <Input placeholder='Enter Song Name' value={fileName} onChange={(e) => setFileName(e.target.value)} type={"text"} className=' w-[60%]' />
+                            <Input placeholder='Enter Song Name' value={fileName} onChange={(e) => setFileName(e.target.value)} type={"text"} className=' w-[70%] sm:w-[60%]' />
                         </div>
                         <div className=' flex gap-4'>
                             <p className=' w-[30%]'>
                                 Artist :
                             </p>
-                            <Input placeholder='Enter Singer Name' value={artistName} onChange={(e) => setArtistName(e.target.value)} type={"text"} className=' w-[60%]' />
+                            <Input placeholder='Enter Singer Name' value={artistName} onChange={(e) => setArtistName(e.target.value)} type={"text"} className=' w-[70%] sm:w-[60%]' />
                         </div>
                         <div className=' flex gap-4'>
                             <p className=' w-[30%]'>
@@ -118,7 +117,7 @@ export default function Upload() {
                     :
                     <div className=' w-full space-y-3'>
                         <p className=' w-max mx-auto text-neutral-500'>Login to upload song</p>
-                        <Button title='Login' onclick={changeToLogin} style className=' mx-auto' />
+                        <Button title='Login' onclick={() =>  signIn("google")} style className=' mx-auto' />
                     </div>
             }
         </ModalWrapper>

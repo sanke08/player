@@ -1,10 +1,8 @@
 "use client"
-import { loadUser } from '@/redux/actions/user.actions'
-import { CLOSE_MOBILE_TOGGLE, OPEN_LOGIN_MODAL, OPEN_MOBILE_TOGGLE, OPEN_REGISTER_MODAL } from '@/redux/constance'
-import axios from 'axios'
-import { ChevronLeft, ChevronRight, Heart, Home, LucideSheet, Menu, PlayCircle, Search, Sheet, UserCircle, X } from 'lucide-react'
+import { CLOSE_MOBILE_TOGGLE, OPEN_MOBILE_TOGGLE, } from '@/redux/constance'
+import { ChevronLeft, ChevronRight, Heart, Home, Menu, Search, UserCircle, X } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button'
 import { twMerge } from 'tailwind-merge'
@@ -60,7 +58,13 @@ const MobileToggle = ({ children, userId, userImage }: { children: React.ReactNo
                             <Button title='Login' style onclick={() => { signIn("google") }} />
                         </div>
                 }
-                <button onClick={() => router.push("/liked")} title='liked' className={twMerge(' absolute group bottom-10 left-10 gap-2 w-56 flex items-center bg-green-900/40 hover:bg-green-700/90 transition-all duration-500 rounded-lg py-2', pathname === "/liked" && " outline outline-1 scale-[110%] bg-green-700/90")}>
+                <button onClick={() => {
+                    pathname === "/liked" ?
+                        router.back()
+                        : router.push("/liked")
+                }}
+
+                    title='liked' className={twMerge(' absolute group bottom-10 left-10 gap-2 w-56 flex items-center bg-green-900/40 hover:bg-green-700/90 transition-all duration-500 rounded-lg py-2', pathname === "/liked" && " outline outline-1 scale-[110%] bg-green-700/90")}>
                     <p className='font-medium text-lg w-full'>Liked</p>
                     <div className=' w-1/3'>
                         <Heart size={40} color='' className=' group-hover:scale-110 fill-green-500 transition-all duration-200' />

@@ -12,10 +12,7 @@ export default function LibraryHeader({ userId }: any) {
             <div className=' w-max'>
                 <p>Your library</p>
             </div>
-            {
-                userId &&
-                <Button onclick={() => { dispatch({ type: OPEN_UPLOAD_FILE_MODAL }); dispatch({ type: CLOSE_MOBILE_TOGGLE }) }} icon={<FolderPlus size={23} />} className=' cursor-pointer opacity-50 p-0 m-0 min-w-fit hover:opacity-100 transition' />
-            }
+            <Button onclick={() => { dispatch({ type: OPEN_UPLOAD_FILE_MODAL }); dispatch({ type: CLOSE_MOBILE_TOGGLE }) }} icon={<FolderPlus size={23} />} className=' cursor-pointer opacity-50 p-0 m-0 min-w-fit hover:opacity-100 transition' />
         </div>
     )
 }

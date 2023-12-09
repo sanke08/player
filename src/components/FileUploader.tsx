@@ -12,7 +12,6 @@ export default function FileUploader({ onchange, endpoint }: Props) {
         <div className="">
             <UploadButton
                 endpoint={endpoint} 
-                // onClientUploadComplete={(res: any) => console.log(res)} 
                 onClientUploadComplete={(res: any) => onchange(res?.[0].fileUrl)} 
                 onUploadError={(error: any) => { console.log(error) }}
             />
