@@ -28,8 +28,6 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { data: session } = useSession()
-    const [like, setLike] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
     const handlePlay = () => {
         // @ts-ignore
         if (session?.user?._id) {
@@ -38,30 +36,13 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
             return toast.error("Please Login")
         }
     }
-    const handleLike = async () => {
-        // @ts-ignore
-        if (session?.user?._id) {
-            setLoading(true)
-            setLike((pre)=>!pre)
-            // @ts-ignore
-            await axios.put("/api/file/handle-like", { songId: song._id }, { headers: { "Authorization": session.user._id } })
-            setLoading(false)
-            router.refresh()
-        }
-    }
-    useEffect(() => {
-        // @ts-ignore
-        const Liked = session?.user?.liked?.find((value: any) => value === song._id)
-        setLike(Liked)
-        // @ts-ignore
-    }, [song._id, session?.user?.liked])
 
     return (
-        <div className=' group bg-neutral-400/5 rounded-md p-2 w-full flex items-center relative cursor-pointer gap-2 hover:bg-neutral-400/10 transition overflow-hidden'>
-            <div onClick={handlePlay} className=' w-12 h-12 relative rounded-lg overflow-hidden'>
+        <div onClick={handlePlay} className=' group bg-neutral-400/5 rounded-md p-2 w-full flex items-center relative cursor-pointer gap-2 hover:bg-neutral-400/10 transition overflow-hidden'>
+            <div className=' w-12 h-12 relative rounded-lg overflow-hidden'>
                 <Image src={song.image} alt='img' className='' fill />
             </div>
-            <div onClick={handlePlay}>
+            <div>
                 <p>
                     {song?.title}
                 </p>
@@ -70,21 +51,7 @@ const LibrarySongCard: React.FC<Props> = ({ song }) => {
                 </p>
             </div>
             <div className=' absolute right-5 flex gap-1 '>
-                {
-                    loading ?
-                        <Loader2 size={20} className=' animate-spin' />
-                        :
-
-                        <div>
-                            {
-                                like ?
-                                    <Heart onClick={handleLike} size={20} className=' fill-green-500 delay-100 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' color='' />
-                                    :
-                                    <Heart onClick={handleLike} size={20} className='sm:opacity-0 delay-100 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' />
-                            }
-                        </div>
-                }
-                <Play onClick={handlePlay} size={20} className='fill-green-500 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' color='' />
+                <Play size={20} className='fill-green-500 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 sm:translate-x-10 group-hover:translate-x-0' color='' />
             </div>
         </div>
     )
