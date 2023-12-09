@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { HeartIcon,  PlayCircle } from 'lucide-react'
+import { HeartIcon, PlayCircle } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -18,8 +18,8 @@ interface Props {
         user: string,
         __v: number
     },
-    isLiked: boolean
-    userId: string
+    isLiked?: boolean
+    userId?: string
 }
 const SongCard: React.FC<Props> = ({ song, isLiked, userId }) => {
     const router = useRouter()
@@ -41,7 +41,9 @@ const SongCard: React.FC<Props> = ({ song, isLiked, userId }) => {
         dispatch({ type: "PLAYER_LIST", payload: song })
     }
     useEffect(() => {
-        setLike(isLiked)
+        if (isLiked) {
+            return setLike(isLiked)
+        }
     }, [song._id, isLiked])
     return (
         <div className='group relative flex flex-col items-center justify-center rounded-xl overflow-hidden transition gap-x-4 p-2 cursor-pointer bg-neutral-400/5 hover:bg-neutral-400/10  '>
